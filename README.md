@@ -2,27 +2,35 @@
 
 Web demo and future production direction for a **gym management and training platform** serving **two locations**, structured programming, scheduling, and member progress — with strict separation between **what clients see** and **what staff keep internal**.
 
-This repository currently holds **planning and product-definition documents** only. **Application scaffolding is intentionally not started yet.**
+The repo includes **product docs**, a **Next.js scaffold** (App Router, TypeScript, Tailwind, shadcn-style UI), and a **Supabase/Postgres schema** (migrations, RLS, Storage policies, seed). Next.js ↔ Supabase wiring in app code is still minimal (see `src/services/supabase/` stubs).
+
+---
+
+## Quick start
+
+```bash
+npm install
+cp .env.example .env.local   # optional for now
+npm run dev
+```
+
+Open [http://localhost:3000](http://localhost:3000), then use **Sign in** → pick a **demo role** (Manager / Trainer / Client).
+
+Details: [docs/SETUP.md](docs/SETUP.md) · Route list: [docs/ROUTE_MAP.md](docs/ROUTE_MAP.md) · Structure: [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
 
 ---
 
 ## Who this is for
 
-- **Founder / operations:** read `docs/PRD.md` and `docs/USER_FLOWS.md` first.  
-- **Engineering:** read `.cursor/rules/product.md`, `.cursor/rules/engineering.md`, then the docs below.
+- **Founder / operations:** [docs/PRD.md](docs/PRD.md), [docs/USER_FLOWS.md](docs/USER_FLOWS.md)  
+- **Engineering:** [.cursor/rules/product.md](.cursor/rules/product.md), [.cursor/rules/engineering.md](.cursor/rules/engineering.md), [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
 
 ---
 
-## Intended tech stack (when build starts)
+## Tech stack
 
-- Next.js App Router  
-- TypeScript  
-- Tailwind CSS  
-- shadcn/ui  
-- Supabase Auth  
-- Supabase Postgres  
-- Supabase Storage  
-- Supabase Realtime (where it earns its place)
+- Next.js 15 (App Router) · TypeScript · Tailwind CSS · shadcn/ui-style components  
+- Planned: Supabase Auth, Postgres (RLS), Storage, Realtime
 
 ---
 
@@ -30,32 +38,41 @@ This repository currently holds **planning and product-definition documents** on
 
 | Document | Purpose |
 |----------|---------|
-| [docs/PRD.md](docs/PRD.md) | Product requirements in plain English (LOCKED vs ASSUMPTION vs OPEN). |
-| [docs/USER_FLOWS.md](docs/USER_FLOWS.md) | Step-by-step journeys for manager, trainer, and client. |
-| [docs/PERMISSIONS_MATRIX.md](docs/PERMISSIONS_MATRIX.md) | Access rules aligned to RLS and server checks. |
-| [docs/OPEN_QUESTIONS.md](docs/OPEN_QUESTIONS.md) | Decisions still needed before some features are built. |
-| [docs/PHASED_IMPLEMENTATION_PLAN.md](docs/PHASED_IMPLEMENTATION_PLAN.md) | Demo-first build order. |
-| [docs/RISK_REVIEW.md](docs/RISK_REVIEW.md) | Contradictions, privacy, scheduling, billing, logging risks. |
-| [.cursor/rules/product.md](.cursor/rules/product.md) | Cursor-facing product guardrails. |
-| [.cursor/rules/engineering.md](.cursor/rules/engineering.md) | Cursor-facing engineering guardrails. |
+| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | App structure, auth stub, domain reminders |
+| [docs/ROUTE_MAP.md](docs/ROUTE_MAP.md) | URLs and protection rules |
+| [docs/SETUP.md](docs/SETUP.md) | Install, env, dev bypass, Supabase CLI & seed |
+| [docs/DB_SCHEMA.md](docs/DB_SCHEMA.md) | Tables, keys, lifecycles, privacy summary |
+| [docs/RLS_MATRIX.md](docs/RLS_MATRIX.md) | Row-level security by role |
+| [docs/STORAGE_MODEL.md](docs/STORAGE_MODEL.md) | Storage buckets & path rules |
+| [docs/PRD.md](docs/PRD.md) | Product requirements (LOCKED / ASSUMPTION / OPEN) |
+| [docs/USER_FLOWS.md](docs/USER_FLOWS.md) | Journeys by role |
+| [docs/PERMISSIONS_MATRIX.md](docs/PERMISSIONS_MATRIX.md) | Access rules for future RLS |
+| [docs/OPEN_QUESTIONS.md](docs/OPEN_QUESTIONS.md) | Decisions still needed |
+| [docs/PHASED_IMPLEMENTATION_PLAN.md](docs/PHASED_IMPLEMENTATION_PLAN.md) | Build order |
+| [docs/RISK_REVIEW.md](docs/RISK_REVIEW.md) | Risks and early locks |
 
 ---
 
 ## Locked business rules (v1 summary)
 
 - **Two locations** from day one; staff may work at both; **manager assigns location per staff per day**.  
-- Membership **names** (not numeric tiers as the story): **Open Gym**, **Semi-Private**, **Private** — each with the capabilities defined in the PRD.  
-- **Month-to-month** memberships; **no pause/freeze**; **mid-month upgrade/downgrade** with **history preserved**.  
-- **Prescription vs completed logs** stay separate; **staff-only notes** separate from **client notes**; **shifts** separate from **client appointments**.  
-- **30-minute** training appointments; **no-shows** tracked; **substitute trainers** allowed for Private.  
-- **Invoices and receipts stored**; **payments processing** is future; **in-app messaging** is v2.  
+- Membership **names**: **Open Gym**, **Semi-Private**, **Private** — not tier numbers as the product story.  
+- **Month-to-month** memberships; **no pause/freeze**; **mid-month changes** with **history preserved**.  
+- **Prescription vs logs**; **staff-only vs client notes**; **shifts vs appointments** — modeled separately.  
+- **30-minute** appointments; **no-shows**; **substitute trainers** for Private.  
+- **Invoices/receipts stored**; **payments** later; **in-app messaging** v2.  
 - **Exercise library** metadata in v1; **no exercise media uploads** in v1.
 
 ---
 
-## Local development
+## Scripts
 
-Not applicable until the app is scaffolded. When implementation begins, this README will gain setup instructions (environment variables, Supabase migrations, and run commands).
+| Command | Purpose |
+|---------|---------|
+| `npm run dev` | Dev server (Turbopack) |
+| `npm run build` | Production build |
+| `npm run start` | Run production build |
+| `npm run lint` | ESLint |
 
 ---
 
